@@ -1,9 +1,10 @@
 
-* .deps - Automatically created, dependency tree. Don't add to repos.
+=== Files ===
 * .constructrc - Python that gets called for the current directory before
   construct does its thing.
 * construct - command-line command. Either specify a rule file, pipe one in, or
   it looks for buildspec
+* (.deps - Automatically created, dependency tree. Don't add to your repository.)
 
 
 * When a buildspec specifies running construct in a different directory, it
