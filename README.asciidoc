@@ -1,0 +1,26 @@
+
+* .deps - Automatically created, dependency tree. Don't add to repos.
+* .constructrc - Python that gets called for the current directory before
+  construct does its thing.
+* construct - command-line command. Either specify a rule file, pipe one in, or
+  it looks for buildspec
+
+
+* When a buildspec specifies running construct in a different directory, it
+  doesn't double-memoize
+* Easily installed on mac + linux
+
+
+* Which directories to watch for dependency creation. (default all children of
+  .constructrc?) - automatically also changes working directory?
+* Easy way to specify working directory (and going back)
+* .constructrc's in parent directories loaded always? Yes
+
+* use psyco
+
+
+* How hard would it be to, say, replace rebar, including all application
+  building etc.
+
+* Installable modules, like for erlang etc. (application building- so like a
+  generic capistrano)
