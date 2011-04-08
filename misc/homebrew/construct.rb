@@ -1,0 +1,12 @@
+require 'formula'
+
+class Construct < Formula
+  head 'git://github.com/josephwecker/construct.git'
+  homepage 'https://github.com/josephwecker/construct'
+
+  def install
+    bin.mkdir
+    bin.install ['construct']
+  end
+end
+
