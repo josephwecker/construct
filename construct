@@ -47,6 +47,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import glob
 
 # so you can do "from fabricate import *" to simplify your build script
 __all__ = ['setup', 'run', 'autoclean', 'main', 'shell', 'fabricate_version',
@@ -1122,6 +1123,21 @@ def hard_err(msg, parser=None):
         parser.print_help()
     sys.exit(1)
 
+class Addons:
+    files = {}
+    def find_in(self, *args):
+        directory = os.path.expanduser(os.path.join(*args))
+        if os.path.isdir(directory):
+            for f in glob.glob(os.path.join(directory,'*.py')):
+                (_path, module) = os.path.split(f)
+                self.files[module] = f
+
+    def load_modules(self):
+        local_dict = {}
+        for m in self.files:
+            with open(self.files[m]) as code:
+                exec(code.read())
+
 if __name__ == '__main__':
     status = 0
     parser, options, args = parse_options('[options] construction-files/directories')
@@ -1137,11 +1153,26 @@ if __name__ == '__main__':
                 else: hard_err('Cannot find construction file "%s"' % lookfor)
             elif os.path.isfile(location): constructions.append(location)
             else: hard_err('Cannot find construction file "%s"' % location)
-    elif os.path.isfile('./construction'): constructions.append('./construction')
+    elif os.path.isfile('construction'): constructions.append('construction')
     elif not options.clean: hard_err('Cannot find construction file "construction"', parser)
 
     # Load addons wherever we can find them.
     # Look: /etc/construct/addons, ~/.construct, then local .construct's
+    if not options.no_addons:
+        addons = Addons()
+        addons.find_in('etc','construct','addons')
+        addons.find_in('~','.construct')
+        if not options.no_parent_addons:
+            (wd, _cwd) = os.path.split(os.path.abspath(os.getcwd()))
+            checkdirs = []
+            while not os.path.samefile(os.path.normpath('/'), wd) and not os.path.samefile(os.path.expanduser('~'),wd):
+                checkdirs.append(wd)
+                (wd, _old_wd) = os.path.split(wd)
+            checkdirs.reverse()
+            for d in checkdirs: addons.find_in(d, '.construct')
+        addons.find_in('.','.construct') # Highest precedence
+
+        addons.load_modules()
 
     sys.exit(status)
 

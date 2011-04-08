@@ -52,8 +52,7 @@ construct [options] construction-files
    * Then loads from '~/.construct/'
    * Then loads from any '.construct' files in the current directory
    * Then loads from any '.construct' files in any parent directories unless -P
-   * If any files have the same name it loads the file with the more recent
-     timestamp.
+   * If any files have the same name it loads the most local of them.
 2. Look for appropriate construction-file
    * If file(s) are specified on the command-line, runs them.
    * If directories are specified on the command-line, looks for construction
