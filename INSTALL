@@ -1,6 +1,11 @@
 Very soon there should be packages for installing via apt and brew. But in any
 case, here's what you need to do manually:
 
-Put bin/
+Put bin/construct somewhere where you have your binaries (such as /usr/local/bin )
+Add the following environment variable to your .bash_profile or .profile or
+.bashrc :
 
+  export CONSTRUCT_ADDONS="...path-to.../construct/lib"
+
+(replacing with the actual path to the lib directory of course)
 

@@ -1159,7 +1159,8 @@ if __name__ == '__main__':
     # Look: /etc/construct/addons, ~/.construct, then local .construct's
     if not options.no_addons:
         addons = Addons()
-        addons.find_in('etc','construct','addons')
+        if os.environ['CONSTRUCT_ADDONS']:
+            addons.find_in(os.path.expandvars('$CONSTRUCT_ADDONS'))
         addons.find_in('~','.construct')
         if not options.no_parent_addons:
             (wd, _cwd) = os.path.split(os.path.abspath(os.getcwd()))

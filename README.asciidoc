@@ -48,7 +48,7 @@ construct [options] construction-files
 
 ==== Basic sequence of events
 1. Load addons (unless -A which disables addons)
-   * Loads from '/etc/construct/addons/*' first
+   * Loads from '$CONSTRUCT_ADDONS/*' first
    * Then loads from '~/.construct/'
    * Then loads from any '.construct' files in the current directory
    * Then loads from any '.construct' files in any parent directories unless -P
@@ -69,7 +69,7 @@ construct [options] construction-files
 'construct'::
   command-line command. Either specify a rule file(s) or it looks for
   construction file in current directory.
-'/etc/construct/addons/*'::
+'$CONSTRUCT_ADDONS/*'::
   global addons (python files that get imported)
 '~/.construct/*'::
   user-local addons
