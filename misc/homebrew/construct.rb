@@ -8,7 +8,14 @@ class Construct < Formula
     bin.mkdir
     bin.install ['bin/construct']
     lib.mkdir
-    lib.install Dir['construct-addons']
+    lib.install Dir['lib']
   end
+
+  def caveats; <<-EOS.undent
+    After installation, set $CONSTRUCT_ADDONS in your profile:
+      export CONSTRUCT_ADDONS=#{lib}
+    EOS
+  end
+  
 end
 
