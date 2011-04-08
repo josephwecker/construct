@@ -1177,10 +1177,5 @@ if __name__ == '__main__':
     for c in constructions:
         with open(c) as code: exec(code)
 
-    env = {}
-    for e in os.environ:
-        env[e] = os.environ[e]
-    import pprint
-    pprint.pprint(env)
     sys.exit(status)
 

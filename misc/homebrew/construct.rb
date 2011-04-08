@@ -8,7 +8,7 @@ class Construct < Formula
     bin.mkdir
     bin.install ['bin/construct']
     lib.mkdir
-    lib.install Dir['lib']
+    lib.install Dir['lib/*']
   end
 
   def caveats; <<-EOS.undent
