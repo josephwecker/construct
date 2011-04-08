@@ -24,7 +24,6 @@ features:
 
 ==== Usage
 
-[source,bash]
 ----
 construct [options] construction-files
 ----
