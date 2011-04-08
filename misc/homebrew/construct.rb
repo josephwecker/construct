@@ -6,7 +6,9 @@ class Construct < Formula
 
   def install
     bin.mkdir
-    bin.install ['construct']
+    bin.install ['bin/construct']
+    lib.mkdir
+    lib.install Dir['*']
   end
 end
 
