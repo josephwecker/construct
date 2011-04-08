@@ -55,7 +55,9 @@ construct [options] construction-files
    * If any files have the same name it loads the file with the more recent
      timestamp.
 2. Look for appropriate construction-file
-   * If file(s) are specified on the command-line, runs them
+   * If file(s) are specified on the command-line, runs them.
+   * If directories are specified on the command-line, looks for construction
+     files within them to run.
    * Otherwise looks for 'construction' in the current directory
    * If not found, it expects instructions to be piped in (?)
 3. Run construct instructions
@@ -81,8 +83,14 @@ construct [options] construction-files
 
 
 == TODO
+(This is just a list for me and it is in flux. Please feel free to ignore)
+
+* Much better failure - don't dump stack or anything - be python-ignorant
 * Directory push/pop
 * Figure out how to sanely automate which directories to monitor
+  - Start parsing some standard ones like 'cp' and 'mv'?
+* Hook for determining if a command should be run- for example, if it's looking
+  for an update on a remote machine...
 * "Children" construct instantiations that aren't really separate
   instantiations (construct_load ... or something)
 * Refactor optparse to argparse

@@ -1115,28 +1115,33 @@ def main(globals_dict=None, build_dir=None, extra_options=None):
         os.chdir(original_path)
     sys.exit(status)
 
+def hard_err(msg, parser=None):
+    sys.stderr.write('ERROR: ' + msg + '\n')
+    if parser:
+        sys.stderr.write('\n')
+        parser.print_help()
+    sys.exit(1)
+
 if __name__ == '__main__':
-    '''
-        Addons: Look first in /etc/construct/addons
-                         then ~/.construct/
-                         then `pwd`/.construct
-                         then `pwd`/../.construct (etc.)
-    '''
-    # if called as a script, emulate memoize.py -- run() command line
-    parser, options, args = parse_options('[options] construction-files')
-    #status = 0
-    #if args:
-    #    status = memoize(args)
-    #elif not options.clean:
-    #    parser.print_help()
-    #    status = 1
-    # autoclean may have been used
-    #sys.exit(status)
-
-
-
     status = 0
+    parser, options, args = parse_options('[options] construction-files/directories')
 
+    # Make sure there is at least one construction file to run (unless
+    # autoclean)
+    constructions = []
+    if args:
+        for location in args:
+            if os.path.isdir(location):
+                lookfor = os.path.join(location,'construction')
+                if os.path.isfile(lookfor): constructions.append(lookfor)
+                else: hard_err('Cannot find construction file "%s"' % lookfor)
+            elif os.path.isfile(location): constructions.append(location)
+            else: hard_err('Cannot find construction file "%s"' % location)
+    elif os.path.isfile('./construction'): constructions.append('./construction')
+    elif not options.clean: hard_err('Cannot find construction file "construction"', parser)
 
+    # Load addons wherever we can find them.
+    # Look: /etc/construct/addons, ~/.construct, then local .construct's
 
+    sys.exit(status)
 
