@@ -8,7 +8,7 @@ class Construct < Formula
     bin.mkdir
     bin.install ['bin/construct']
     lib.mkdir
-    lib.install Dir['*']
+    lib.install Dir['construct-addons']
   end
 end
 
