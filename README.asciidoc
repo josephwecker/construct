@@ -1,27 +1,87 @@
+== Purpose
+fabricate.py (http://code.google.com/p/fabricate/) is awesome, and I have yet
+to find something better at automatically determining dependencies- leaving you
+with pretty much the simplest "make" files you could imagine. But it's
+currently missing some basic plumbing that makes it really useful for me and
+the projects I'm involved in.  This is an attempt to rectify that. Some basic
+features:
 
-=== Files ===
-* .constructrc - Python that gets called for the current directory before
-  construct does its thing.
-* construct - command-line command. Either specify a rule file, pipe one in, or
-  it looks for buildspec
-* (.deps - Automatically created, dependency tree. Don't add to your repository.)
+* Easy to install.
+* Automatically looks for a 'construction' file.
+* Easily add addons for language-specific or project-specific
+  construction/build commands.
+* Easily customize per-project.
+* Like fabricate, automatically detect dependencies and only run commands when
+  necessary.
+* Procedural, like fabricate, with all the power of Python if you need it.
+* Intuitive current-working-directory / change-working-directory, etc.
+* Won't "double-memoize" if you call construct on another construction file
+  from a construction file- automatically handles current-working-directory as
+  per the principle of least surprise.
 
 
-* When a buildspec specifies running construct in a different directory, it
-  doesn't double-memoize
-* Easily installed on mac + linux
+== Operational Overview
+
+==== Usage
+
+[source,bash]
+----
+construct [options] construction-files
+----
+
+.Options:
+----
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -t, --time            use file modification times instead of MD5 sums
+  -d DIR, --dir=DIR     add DIR to list of relevant directories
+  -c, --clean           autoclean build outputs before running
+  -q, --quiet           don't echo commands, only print errors
+  -D, --debug           show debug info (why commands are rebuilt)
+  -k, --keep            keep temporary strace output files
+  -A, --no-addons       do not load any construct addons
+  -P, --no-parent-addons
+                        ignore .construct files in parent directories
+  -s DEPS_STORE, --deps-store=DEPS_STORE
+                        use a different .deps file to store and recover
+                        dependencies
+----
+
+==== Basic sequence of events
+1. Load addons (unless -A which disables addons)
+   * Loads from '/etc/construct/addons/*' first
+   * Then loads from '~/.construct/'
+   * Then loads from any '.construct' files in the current directory
+   * Then loads from any '.construct' files in any parent directories unless -P
+2. Look for appropriate construction-file
+   * If file(s) are specified on the command-line, runs them
+   * Otherwise looks for 'construction' in the current directory
+   * If not found, it expects instructions to be piped in (?)
+3. Run construct instructions
+   * Construction instructions are always run relative to the location of the
+     construction file unless the directory is changed manually.
+   * The .deps file is stored in the same directory as the construction file
+     unless '-s'
+
+==== Files
+* 'construct' - command-line command. Either specify a rule file(s) or it looks
+  for construction file in current directory.
+* '/etc/construct/addons/*' global addons (python files that get imported)
+* '~/.construct/*' user-local addons
+* '.construct/*' local/project addons (you'll probably want these included in
+  any source control repository)
+* '.deps' Automatically created dependency tree. Don't add it to your
+  repository unless you know what you're doing.
 
 
-* Which directories to watch for dependency creation. (default all children of
-  .constructrc?) - automatically also changes working directory?
-* Easy way to specify working directory (and going back)
-* .constructrc's in parent directories loaded always? Yes
-
-* use psyco
-
-
-* How hard would it be to, say, replace rebar, including all application
-  building etc.
-
-* Installable modules, like for erlang etc. (application building- so like a
-  generic capistrano)
+== TODO
+* Directory push/pop
+* Figure out how to sanely automate which directories to monitor
+* "Children" construct instantiations that aren't really separate
+  instantiations (construct_load ... or something)
+* Refactor optparse to argparse
+* Installable modules for erlang, haXe, and Go (because I need them :P) Ideally
+  able to do just about everything rebar can do as far as Erlang is concerned.
+* Test on windows?
+* Debian package
+* Macports and homebrew packages

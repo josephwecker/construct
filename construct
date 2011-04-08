@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-"""Build tool that is an extension of fabricate.py (New BSD License- credits
+"""
+
+Build tool that is an extension of fabricate.py (New BSD License- credits
 follow). Gives it better command-line functionality and defaults for easier
-installation and building. See README for full set of changes
+installation and building. See README for full set of changes.
 
 ------------------------------------------------------------------------------
 
@@ -28,6 +30,8 @@ To get help on fabricate functions:
 
 # fabricate version number
 __version__ = '1.16'
+# construct version number
+__cversion__ = '0.01'
 
 # if version of .deps file has changed, we know to not use it
 deps_version = 2
@@ -999,7 +1003,7 @@ def outofdate(command):
 def parse_options(usage, extra_options=None):
     """ Parse command line options and return (parser, options, args). """
     parser = optparse.OptionParser(usage='Usage: %prog '+usage,
-                                   version='%prog '+__version__)
+                                   version='%prog '+__version__+'/'+__cversion__)
     parser.disable_interspersed_args()
     parser.add_option('-t', '--time', action='store_true',
                       help='use file modification times instead of MD5 sums')
@@ -1013,6 +1017,12 @@ def parse_options(usage, extra_options=None):
                       help="show debug info (why commands are rebuilt)")
     parser.add_option('-k', '--keep', action='store_true',
                       help='keep temporary strace output files')
+    parser.add_option('-A', '--no-addons', action='store_true',
+                      help='do not load any construct addons')
+    parser.add_option('-P', '--no-parent-addons', action='store_true',
+                      help='ignore .construct files in parent directories')
+    parser.add_option('-s', '--deps-store', action='store',
+                      help='use a different .deps file to store and recover dependencies')
     if extra_options:
         # add any user-specified options passed in via main()
         for option in extra_options:
@@ -1106,8 +1116,14 @@ def main(globals_dict=None, build_dir=None, extra_options=None):
     sys.exit(status)
 
 if __name__ == '__main__':
+    '''
+        Addons: Look first in /etc/construct/addons
+                         then ~/.construct/
+                         then `pwd`/.construct
+                         then `pwd`/../.construct (etc.)
+    '''
     # if called as a script, emulate memoize.py -- run() command line
-    #parser, options, args = parse_options('[options] command line to run')
+    parser, options, args = parse_options('[options] construction-files')
     #status = 0
     #if args:
     #    status = memoize(args)
@@ -1116,6 +1132,7 @@ if __name__ == '__main__':
     #    status = 1
     # autoclean may have been used
     #sys.exit(status)
+
 
 
     status = 0
