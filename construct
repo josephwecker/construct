@@ -1135,8 +1135,7 @@ class Addons:
     def load_modules(self):
         local_dict = {}
         for m in self.files:
-            with open(self.files[m]) as code:
-                exec(code.read())
+            with open(self.files[m]) as code: exec(code)
 
 if __name__ == '__main__':
     status = 0
@@ -1173,6 +1172,10 @@ if __name__ == '__main__':
         addons.find_in('.','.construct') # Highest precedence
 
         addons.load_modules()
+
+    # Here we go for real!
+    for c in constructions:
+        with open(c) as code: exec(code)
 
     sys.exit(status)
 
