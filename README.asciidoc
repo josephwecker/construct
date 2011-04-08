@@ -63,14 +63,19 @@ construct [options] construction-files
      unless '-s'
 
 ==== Files
-* 'construct' - command-line command. Either specify a rule file(s) or it looks
-  for construction file in current directory.
-* '/etc/construct/addons/*' global addons (python files that get imported)
-* '~/.construct/*' user-local addons
-* '.construct/*' local/project addons (you'll probably want these included in
-  any source control repository)
-* '.deps' Automatically created dependency tree. Don't add it to your
-  repository unless you know what you're doing.
+'construct'::
+  command-line command. Either specify a rule file(s) or it looks for
+  construction file in current directory.
+'/etc/construct/addons/*'::
+  global addons (python files that get imported)
+'~/.construct/*'::
+  user-local addons
+'.construct/*'::
+  local/project addons (you'll probably want these included in any source
+  control repository)
+'.deps'::
+  Automatically created dependency tree. Don't add it to your repository unless
+  you know what you're doing.
 
 
 == TODO
